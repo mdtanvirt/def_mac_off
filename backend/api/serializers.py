@@ -19,10 +19,16 @@ class ProductSerializer(serializers.ModelSerializer):
         return value
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    product = ProductSerializer()
+    # 1st way to show all product info
+    #product = ProductSerializer()
+
+    # 2nd way to show specific inf of product
+    product_name = serializers.CharField(source='product.name')
+    product_price = serializers.DecimalField(source='product.price', max_digits=10, decimal_places=2)
+
     class Meta:
         model = OrderItem
-        fields = ('id', 'product', 'quantity', 'order')    
+        fields = ('product_name', 'product_price', 'quantity', 'sub_total', 'order')    
 
 class OrderSerializer(serializers.ModelSerializer):
     items = OrderItemSerializer(many=True, read_only=True)
